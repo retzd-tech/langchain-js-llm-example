@@ -6,8 +6,17 @@ import { OpenAIEmbeddings } from 'langchain/embeddings';
 
 const data = [];
 const files = await new Promise((resolve, reject) => 
-  glob("training/retzyumar*.md", (err, files) => err ? reject(err) : resolve(files))
+  glob("training/uu19-mini-demo.txt", (err, files) => err ? reject(err) : resolve(files))
 );
+
+// const files = [
+//   'training/uu19-kejagung-ai-data-1.txt',
+//   'training/uu19-kejagung-ai-data-2.txt',
+//   'training/uu21-kejagung-ai-data-1.txt',
+//   'training/uu21-kejagung-ai-data-2.txt',
+//   'training/uu22-kejagung-ai-data-1.txt',
+//   'training/uu22-kejagung-ai-data-1-2.txt',
+// ];
 
 for (const file of files) {
   data.push(fs.readFileSync(file, 'utf-8'));
@@ -16,7 +25,7 @@ for (const file of files) {
 console.log(`Added ${files.length} files to data.  Splitting text into chunks...`);
 
 const textSplitter = new CharacterTextSplitter({
-  chunkSize: 2000,
+  chunkSize: 12720,
   separator: "\n"
 });
 
@@ -36,14 +45,14 @@ const store = await HNSWLib.fromTexts(
   docs,
   docs.map((_, i) => ({ id: i })),
   new OpenAIEmbeddings({
-    openAIApiKey: process.env.OPENAI_API_KEY
+    openAIApiKey: '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'
   })
 )
 
 console.clear();
 console.log("Saving Vectorstore");
 
-store.save("vectorStore")
+store.save("vectorStoreKejagungMiniDemo")
 
 console.clear();
 console.log("VectorStore saved");
